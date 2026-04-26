@@ -55,6 +55,7 @@ namespace IngameScript {
 
             public void Update() {
                 UpdateController();
+                if (_controller == null) return;
                 UpdateThrusterGroups();
                 UpdateShipState();
                 UpdateParachute();
@@ -74,7 +75,7 @@ namespace IngameScript {
                     }
                     else {
                         _shipState = ShipState.isIdle;
-                        foreach (var block in _connectors.blocks) {
+                        foreach (IMyShipConnector block in _connectors.blocks) {
                             if (block.OtherConnector != null && block.Status == MyShipConnectorStatus.Connected) {
                                 if (block.OtherConnector.CustomData.Contains(_context.config.DockTag)) {
                                     _shipState = ShipState.isDocked;
@@ -125,10 +126,6 @@ namespace IngameScript {
                     if (_controller.IsMainCockpit) this._controller = _controller;
                 }
                 if (_controller == null) _controller = firstWorking;
-
-                if (_controller == null) {
-                    throw new Exception("Missing Controller!");
-                }
             }
 
             private void UpdateParachute() {

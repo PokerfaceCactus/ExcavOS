@@ -262,10 +262,18 @@ namespace IngameScript {
                 if (gravity.Length() != 0) gravity.Normalize();
 
                 double offLevel = 0.0;
-
+                var tempOverride = false;
+                if (controller.IsUnderControl) {
+                    if (Math.Abs(controller.RotationIndicator.Length()) > 0.1f || Math.Abs(controller.RollIndicator) > 0.1f) {
+                        tempOverride = true;
+                    }
+                }
+                if (gravity.Length() == 0) {
+                    tempOverride = true;
+                }
                 foreach (var gyro in gyrosToUse) {
 
-                    if (Math.Abs(controller.RotationIndicator.Length()) > 0.1f || Math.Abs(controller.RollIndicator) > 0.1f || gravity.Length() == 0) {
+                    if (tempOverride) {
                         gyro.GyroOverride = false;
                         continue;
                     }

@@ -5,3 +5,5 @@
 /ExcavOS/obj
 *.zip
 *.mdk.local.ini
+ExcavOS/.editorconfig
+ExcavOS/mdk.local.ini

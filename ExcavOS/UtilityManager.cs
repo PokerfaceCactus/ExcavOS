@@ -114,7 +114,7 @@ namespace IngameScript {
                 if (CruiseEnabled) {
                     double currentSpeed = controller.GetShipSpeed();
 
-                    var error = CruiseTarget - currentSpeed;
+                    double error = CruiseTarget - currentSpeed;
                     float mass = _context.systemManager.ActiveController.CalculateShipMass().PhysicalMass;
                     float thrust = (float)_context.thrusterManager.forward.maxThrust;
                     float maxAccel = thrust / mass;
@@ -167,7 +167,7 @@ namespace IngameScript {
                 }
 
                 string firstItem = "";
-                foreach (var sorter in _sorters.blocks) {
+                foreach (IMyConveyorSorter sorter in _sorters.blocks) {
                     sorter.GetFilterList(sorterList);
                     if (sorterList.Count == 0) {
                         continue;
@@ -203,7 +203,7 @@ namespace IngameScript {
                     capacity += tank.Capacity;
                 });
                 HydrogenLevel = total / capacity;
-                HydrogenCharge = string.Format("{0:0.0}%", (total / capacity) * 100);
+                HydrogenCharge = string.Format("{0:0.0}%", total / capacity * 100);
             }
 
             private void CalculateCharge() {
@@ -221,7 +221,7 @@ namespace IngameScript {
                 });
 
                 if (max > 0) {
-                    BatteryCharge = string.Format("{0:0.0}%", (stored / max) * 100);
+                    BatteryCharge = string.Format("{0:0.0}%", stored / max * 100);
                     BatteryLevel = stored / max;
                 }
                 else {
@@ -262,7 +262,7 @@ namespace IngameScript {
                 if (gravity.Length() != 0) gravity.Normalize();
 
                 double offLevel = 0.0;
-                var tempOverride = false;
+                bool tempOverride = false;
                 if (controller.IsUnderControl) {
                     if (Math.Abs(controller.RotationIndicator.Length()) > 0.1f || Math.Abs(controller.RollIndicator) > 0.1f) {
                         tempOverride = true;
@@ -271,7 +271,7 @@ namespace IngameScript {
                 if (gravity.Length() == 0) {
                     tempOverride = true;
                 }
-                foreach (var gyro in gyrosToUse) {
+                foreach (IMyGyro gyro in gyrosToUse) {
 
                     if (tempOverride) {
                         gyro.GyroOverride = false;
@@ -279,12 +279,12 @@ namespace IngameScript {
                     }
 
                     gyro.Orientation.GetMatrix(out orientation);
-                    var localDown = Vector3D.Transform(down, MatrixD.Transpose(orientation));
-                    var localGrav = Vector3D.Transform(gravity, MatrixD.Transpose(gyro.WorldMatrix.GetOrientation()));
+                    Vector3D localDown = Vector3D.Transform(down, MatrixD.Transpose(orientation));
+                    Vector3D localGrav = Vector3D.Transform(gravity, MatrixD.Transpose(gyro.WorldMatrix.GetOrientation()));
 
-                    var rotation = Vector3D.Cross(localDown, localGrav);
+                    Vector3D rotation = Vector3D.Cross(localDown, localGrav);
                     double ang = rotation.Length();
-                    ang = Math.Atan2(ang, Math.Sqrt(Math.Max(0.0, 1.0 - ang * ang)));
+                    ang = Math.Atan2(ang, Math.Sqrt(Math.Max(0.0, 1.0 - (ang * ang))));
                     offLevel += ang * 180.0 / 3.14;
 
                     if (!onlyCalculate) {
@@ -294,7 +294,7 @@ namespace IngameScript {
                         rotation.Normalize();
                         rotation *= controlVelocity;
                         gyro.SetValueFloat("Pitch", (float)rotation.GetDim(0));
-                        gyro.SetValueFloat("Yaw", -((float)rotation.GetDim(1)));
+                        gyro.SetValueFloat("Yaw", -(float)rotation.GetDim(1));
                         gyro.SetValueFloat("Roll", -(float)rotation.GetDim(2));
                         //gyro.SetValueFloat("Power", 1.0f);
                         gyro.GyroOverride = true;

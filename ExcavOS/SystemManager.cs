@@ -85,31 +85,23 @@ namespace IngameScript {
                     }
                 }
 
-                if (_config.AutomateStockpile)
-                {
-                    foreach (var block in _gasTanks.blocks)
-                    {
-                        if (_shipState == ShipState.isDocked)
-                        {
+                if (_config.AutomateStockpile) {
+                    foreach (IMyGasTank block in _gasTanks.blocks) {
+                        if (_shipState == ShipState.isDocked) {
                             block.Stockpile = true;
                         }
-                        else
-                        {
+                        else {
                             block.Stockpile = false;
                         }
                     }
                 }
 
-                if (_config.AutomateCharging)
-                {
-                    foreach (var block in _batteries.blocks)
-                    {
-                        if (_shipState == ShipState.isDocked)
-                        {
+                if (_config.AutomateCharging) {
+                    foreach (IMyBatteryBlock block in _batteries.blocks) {
+                        if (_shipState == ShipState.isDocked) {
                             block.ChargeMode = ChargeMode.Recharge;
                         }
-                        else
-                        {
+                        else {
                             block.ChargeMode = ChargeMode.Auto;
                         }
                     }

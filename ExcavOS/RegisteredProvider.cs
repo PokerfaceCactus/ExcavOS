@@ -17,12 +17,9 @@ using VRage.Game;
 using VRage;
 using VRageMath;
 
-namespace IngameScript
-{
-    partial class Program
-    {
-        public class RegisteredProvider : ScriptConfig
-        {
+namespace IngameScript {
+    partial class Program {
+        public class RegisteredProvider : ScriptConfig {
             private IMyTerminalBlock _block;
             private ExcavOSContext _context;
             private readonly Dictionary<int, ScreenHandler<ExcavOSContext>> _screenHandlers = new Dictionary<int, ScreenHandler<ExcavOSContext>>();
@@ -30,104 +27,84 @@ namespace IngameScript
             public bool WasUnderControl = false;
             private bool EnableImmersion = false;
 
-            public RegisteredProvider(ExcavOSContext context, IMyTerminalBlock block, MyIni ini, string section) : base(ini, section)
-            {
+            public RegisteredProvider(ExcavOSContext context, IMyTerminalBlock block, MyIni ini, string section) : base(ini, section) {
                 _block = block;
                 _context = context;
             }
 
-            public override void ReadConfig()
-            {
+            public override void ReadConfig() {
                 EnableImmersion = GetValue("EnableImmersion").ToBoolean(EnableImmersion);
                 IMyTextSurfaceProvider surfaceProvider = _block as IMyTextSurfaceProvider;
-                for (int n = 0; n < surfaceProvider.SurfaceCount; n++)
-                {
+                for (int n = 0; n < surfaceProvider.SurfaceCount; n++) {
                     string key = $"Surface{n}";
-                    if (KeyExists(key))
-                    {
+                    if (KeyExists(key)) {
                         string screen = GetValue(key).ToString();
                         SetScreenHandlerForSurface(screen, n);
-                    } else if (_screenHandlers.ContainsKey(n))
-                    {
+                    }
+                    else if (_screenHandlers.ContainsKey(n)) {
                         ResetScreenHandlerForSurface(n);
                     }
                 }
-                    
-            }
-
-            public override void SetupDefaults()
-            {
 
             }
 
-            public void Update()
-            {
+            public override void SetupDefaults() {
+
+            }
+
+            public void Update() {
                 if (!_block.IsWorking) {
                     return;
                 }
 
                 IMyTextSurfaceProvider surfaceProvider = _block as IMyTextSurfaceProvider;
 
-                if (EnableImmersion && _block is IMyCockpit)
-                {
+                if (EnableImmersion && _block is IMyCockpit) {
                     IMyCockpit cockpit = _block as IMyCockpit;
-                    if (!WasUnderControl && cockpit.IsUnderControl)
-                    {
+                    if (!WasUnderControl && cockpit.IsUnderControl) {
                         // player entered cockpit
                         WasUnderControl = true;
-                        for (int n = 0; n < surfaceProvider.SurfaceCount; n++)
-                        {
-                            if (_screenHandlers.ContainsKey(n))
-                            {
+                        for (int n = 0; n < surfaceProvider.SurfaceCount; n++) {
+                            if (_screenHandlers.ContainsKey(n)) {
                                 _immersiveHandlers[n] = new LoadingScreen(_context);
                             }
                         }
                     }
-                    else if (WasUnderControl && !cockpit.IsUnderControl)
-                    {
+                    else if (WasUnderControl && !cockpit.IsUnderControl) {
                         // player exited cockpit
                         WasUnderControl = false;
-                        for (int n = 0; n < surfaceProvider.SurfaceCount; n++)
-                        {
-                            if (_screenHandlers.ContainsKey(n))
-                            {
+                        for (int n = 0; n < surfaceProvider.SurfaceCount; n++) {
+                            if (_screenHandlers.ContainsKey(n)) {
                                 _immersiveHandlers[n] = new LockScreen(_context);
                             }
                         }
                     }
                 }
-                
 
-                for (int n = 0; n < surfaceProvider.SurfaceCount; n++)
-                {
+
+                for (int n = 0; n < surfaceProvider.SurfaceCount; n++) {
                     IMyTextSurface surface = surfaceProvider.GetSurface(n);
-                    if (_screenHandlers.ContainsKey(n))
-                    {
+                    if (_screenHandlers.ContainsKey(n)) {
                         surface.Script = "";
                         surface.ContentType = ContentType.SCRIPT;
-                        if (_immersiveHandlers.ContainsKey(n))
-                        {
+                        if (_immersiveHandlers.ContainsKey(n)) {
                             _immersiveHandlers[n].Draw(surface);
-                            if (_immersiveHandlers[n].ShouldDispose())
-                            {
+                            if (_immersiveHandlers[n].ShouldDispose()) {
                                 _immersiveHandlers.Remove(n);
                             }
-                        } 
-                        else
-                        {
+                        }
+                        else {
                             _screenHandlers[n].Draw(surface);
                         }
                     }
                 }
             }
 
-            public void SetScreenHandlerForSurface(string screenName, int surfaceIndex)
-            {
+            public void SetScreenHandlerForSurface(string screenName, int surfaceIndex) {
                 _screenHandlers[surfaceIndex] = ScreenHandlerFactory.GetScreenHandler(screenName, _context);
             }
 
-            public void ResetScreenHandlerForSurface(int surfaceIndex)
-            {
+            public void ResetScreenHandlerForSurface(int surfaceIndex) {
                 _screenHandlers.Remove(surfaceIndex);
                 IMyTextSurfaceProvider surfaceProvider = _block as IMyTextSurfaceProvider;
                 IMyTextSurface surface = surfaceProvider.GetSurface(surfaceIndex);
@@ -135,11 +112,10 @@ namespace IngameScript
                 surface.ContentType = ContentType.NONE;
             }
 
-            public bool HasSurfaces()
-            {
+            public bool HasSurfaces() {
                 return _screenHandlers.Count > 0;
             }
-                
+
         }
     }
 }

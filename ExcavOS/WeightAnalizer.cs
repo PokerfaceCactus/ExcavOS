@@ -79,7 +79,7 @@ namespace IngameScript {
                 Vector3D gravity = controller.GetNaturalGravity();
                 double gravitationalForce = mass * gravity.Length();
                 foreach (ThrustGroup thrustGroup in thrusterGroups.groups) {
-                    var GravAccel = Vector3D.Dot(gravity, thrustGroup.direction);
+                    double GravAccel = Vector3D.Dot(gravity, thrustGroup.direction);
                     if (GravAccel > 0) continue;
 
                     double maxAcceleration = thrustGroup.maxThrust / mass;
@@ -98,7 +98,7 @@ namespace IngameScript {
 
                 double effectiveAcceleration = thrustGroups.AccelerationInDirection(Direction, Gravity, Mass);
                 StoppingTime = (float)(-CurrentSpeed / effectiveAcceleration);
-                StoppingDistance = (float)(CurrentSpeed * StoppingTime + (effectiveAcceleration * StoppingTime * StoppingTime) / 2.0f);
+                StoppingDistance = (float)((CurrentSpeed * StoppingTime) + (effectiveAcceleration * StoppingTime * StoppingTime / 2.0f));
             }
 
             private void CalculateCapacityDelta(TimeSpan time) {

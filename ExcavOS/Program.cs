@@ -17,31 +17,26 @@ using VRage.Game;
 using VRage;
 using VRageMath;
 
-namespace IngameScript
-{
-    partial class Program : MyGridProgram
-    {
+namespace IngameScript {
+    partial class Program : MyGridProgram {
         private ExcavOS _scriptHandler;
         private MyIni _storage;
 
-        public Program()
-        {
+        public Program() {
             _storage = new MyIni();
             _storage.TryParse(Storage);
-            _scriptHandler = new ExcavOS(this,_storage);
+            _scriptHandler = new ExcavOS(this, _storage);
             Runtime.UpdateFrequency = UpdateFrequency.Update10 | UpdateFrequency.Update100;
         }
 
-        public void Save()
-        {
+        public void Save() {
             _scriptHandler.Save();
             Storage = _storage.ToString();
-            
+
         }
 
-        public void Main(string argument, UpdateType updateSource)
-        {
-            _scriptHandler.Update(argument, updateSource, Runtime.TimeSinceLastRun);            
+        public void Main(string argument, UpdateType updateSource) {
+            _scriptHandler.Update(argument, updateSource, Runtime.TimeSinceLastRun);
         }
     }
 }

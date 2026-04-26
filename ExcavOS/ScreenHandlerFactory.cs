@@ -17,23 +17,17 @@ using VRage.Game;
 using VRage;
 using VRageMath;
 
-namespace IngameScript
-{
-    partial class Program
-    {
-        public class ScreenHandlerFactory
-        {
+namespace IngameScript {
+    partial class Program {
+        public class ScreenHandlerFactory {
             private static Dictionary<string, ScreenHandler<ExcavOSContext>> _handlers = new Dictionary<string, ScreenHandler<ExcavOSContext>>();
-            public static ScreenHandler<ExcavOSContext> GetScreenHandler(string name, ExcavOSContext context)
-            {
-                if (_handlers.ContainsKey(name))
-                {
+            public static ScreenHandler<ExcavOSContext> GetScreenHandler(string name, ExcavOSContext context) {
+                if (_handlers.ContainsKey(name)) {
                     return _handlers[name];
                 }
 
                 ScreenHandler<ExcavOSContext> handler;
-                switch (name)
-                {
+                switch (name) {
                     case ExcavOSScreen.SCREEN_NAME:
                         handler = new ExcavOSScreen(context);
                         break;

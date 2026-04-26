@@ -17,12 +17,9 @@ using VRage.Game;
 using VRage;
 using VRageMath;
 
-namespace IngameScript
-{
-    partial class Program
-    {
-        abstract public class ScriptHandler
-        {
+namespace IngameScript {
+    partial class Program {
+        abstract public class ScriptHandler {
             protected Program _program;
             private int _tick;
             private int _tick10;
@@ -34,46 +31,40 @@ namespace IngameScript
             protected Config _config;
             protected TimeSpan _timeAccumulator = new TimeSpan();
 
-            public ScriptHandler(Program program, MyIni storage , string scriptName, string scriptVersion)
-            {
+            public ScriptHandler(Program program, MyIni storage, string scriptName, string scriptVersion) {
                 _program = program;
                 _storage = storage;
                 _scriptName = scriptName;
                 _scriptVersion = scriptVersion;
                 _config = new Config(_ini, _scriptName);
-             }
+            }
 
-            public void Update(string argument, UpdateType updateSource, TimeSpan time)
-            {
+            public void Update(string argument, UpdateType updateSource, TimeSpan time) {
                 _timeAccumulator += time;
-                if ((updateSource & UpdateType.Update100) != 0)
-                {
+                if ((updateSource & UpdateType.Update100) != 0) {
                     _tick++;
-                    
+
                     _program.Echo($"{_scriptName} (ver. {_scriptVersion}) is running {_spinner.Substring(_tick % _spinner.Length, 1)}\nLast run time: {_program.Runtime.LastRunTimeMs}ms");
 
-                    if (_tick % 5 == 0)
-                    {
+                    if (_tick % 5 == 0) {
                         Initialize();
                     }
-                    
-                } else if ((updateSource & UpdateType.Update10) != 0)
-                {
+
+                }
+                else if ((updateSource & UpdateType.Update10) != 0) {
                     _tick10++;
                     if (_tick10 % 3 == 0) {
                         Update10();
                     }
-                    
-                } else if (argument != "")
-                {
+
+                }
+                else if (argument != "") {
                     HandleCommand(argument);
                 }
             }
 
-            private void CreateConfig()
-            {
-                if (MyIni.HasSection(_program.Me.CustomData, _scriptName))
-                {
+            private void CreateConfig() {
+                if (MyIni.HasSection(_program.Me.CustomData, _scriptName)) {
                     return;
                 }
 
@@ -83,21 +74,18 @@ namespace IngameScript
 
             }
 
-            protected void Initialize()
-            {
+            protected void Initialize() {
                 CreateConfig();
                 _config.LoadConfig(_program.Me.CustomData);
                 FetchBlocks();
             }
 
             abstract public void FetchBlocks();
-            protected virtual void Update10()
-            {
+            protected virtual void Update10() {
 
             }
 
-            protected virtual void HandleCommand(string argument)
-            {
+            protected virtual void HandleCommand(string argument) {
 
             }
         }

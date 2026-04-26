@@ -29,7 +29,7 @@ namespace IngameScript {
             }
 
             public override void Draw(IMyTextSurface surface) {
-                using (var frame = surface.DrawFrame()) {
+                using (MySpriteDrawFrame frame = surface.DrawFrame()) {
                     Painter.SetCurrentSurfaceAndFrame(surface, frame);
                     float margin = Painter.Width >= 512.0f ? 25.0f : 5.0f;
                     float gap = Painter.Width >= 512.0f ? 10.0f : 2.0f;
@@ -38,9 +38,9 @@ namespace IngameScript {
                     sb.Append("Xy");
                     Vector2 textSize = surface.MeasureStringInPixels(sb, surface.Font, fontSize);
                     Vector2 position = new Vector2(margin, margin);
-                    Vector2 barSize = new Vector2(Painter.Width - margin * 2, Painter.Width >= 512.0f ? 2.0f : 1.0f);
+                    Vector2 barSize = new Vector2(Painter.Width - (margin * 2), Painter.Width >= 512.0f ? 2.0f : 1.0f);
 
-                    Painter.Text(position, (_screenContext.systemManager.ActiveController.GetNaturalGravity().Length() == 0 ? "A-Grav Align" : "P-Grav Align"), fontSize, TextAlignment.LEFT);
+                    Painter.Text(position, _screenContext.systemManager.ActiveController.GetNaturalGravity().Length() == 0 ? "A-Grav Align" : "P-Grav Align", fontSize, TextAlignment.LEFT);
                     if (_screenContext.utilitymanager.Status == "") {
                         float pitch = _screenContext.utilitymanager.GravityAlignPitch;
                         string status;
@@ -48,7 +48,7 @@ namespace IngameScript {
                         else if (pitch == 90) status = "[Up]";
                         else if (pitch == -90) status = "[Down]";
                         else status = string.Format("({0}°)", pitch);
-                        Painter.TextEx(new Vector2(Painter.Width - margin, position.Y), (_screenContext.utilitymanager.GravityAlign ? Painter.PrimaryColor : Painter.SecondaryColor), string.Format("{0} {1}", (_screenContext.utilitymanager.GravityAlign ? "On" : "Off"), status), fontSize, TextAlignment.RIGHT);
+                        Painter.TextEx(new Vector2(Painter.Width - margin, position.Y), _screenContext.utilitymanager.GravityAlign ? Painter.PrimaryColor : Painter.SecondaryColor, string.Format("{0} {1}", _screenContext.utilitymanager.GravityAlign ? "On" : "Off", status), fontSize, TextAlignment.RIGHT);
                     }
                     else {
                         Painter.TextEx(new Vector2(Painter.Width - margin, position.Y), Painter.SecondaryColor, _screenContext.utilitymanager.Status, fontSize, TextAlignment.RIGHT);

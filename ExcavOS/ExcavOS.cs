@@ -79,7 +79,7 @@ namespace IngameScript {
 
             protected override void Update10() {
                 _context.Update(_timeAccumulator);
-                foreach (var registeredProvider in _registeredProviders.Values) {
+                foreach (RegisteredProvider registeredProvider in _registeredProviders.Values) {
                     registeredProvider.Update();
                 }
             }

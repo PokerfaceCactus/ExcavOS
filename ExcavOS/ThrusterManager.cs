@@ -58,10 +58,10 @@ namespace IngameScript {
 
             public void Add(IMyThrust thruster, IMyShipController controller) {
                 if (!thruster.IsFunctional) return;
-                var dir = thruster.WorldMatrix.Backward;
-                var forwardDot = Vector3D.Dot(dir, controller.WorldMatrix.Forward);
-                var upDot = Vector3D.Dot(dir, controller.WorldMatrix.Up);
-                var leftDot = Vector3D.Dot(dir, controller.WorldMatrix.Left);
+                Vector3D dir = thruster.WorldMatrix.Backward;
+                double forwardDot = Vector3D.Dot(dir, controller.WorldMatrix.Forward);
+                double upDot = Vector3D.Dot(dir, controller.WorldMatrix.Up);
+                double leftDot = Vector3D.Dot(dir, controller.WorldMatrix.Left);
 
                 if (forwardDot >= 0.9) forward.thrusters.Add(thruster);
                 else if (forwardDot <= -0.9) backward.thrusters.Add(thruster);

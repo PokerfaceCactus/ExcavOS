@@ -29,7 +29,7 @@ namespace IngameScript {
 
             public override void Draw(IMyTextSurface surface) {
 
-                using (var frame = surface.DrawFrame()) {
+                using (MySpriteDrawFrame frame = surface.DrawFrame()) {
                     Painter.SetCurrentSurfaceAndFrame(surface, frame);
 
                     bool roverMode = _context.thrusterManager.up.thrusters.Count == 0;
@@ -40,8 +40,8 @@ namespace IngameScript {
                     bool shortMode = max < Painter.AvailableSize.X;
 
                     if (roverMode) {
-                        Vector2 position = new Vector2((Painter.AvailableSize.X - max) / 2.0f + margin, margin);
-                        Vector2 size = new Vector2(max - margin * 2, max / 2.0f - margin);
+                        Vector2 position = new Vector2(((Painter.AvailableSize.X - max) / 2.0f) + margin, margin);
+                        Vector2 size = new Vector2(max - (margin * 2), (max / 2.0f) - margin);
                         string subText = shortMode ? "Cargo" : "Cargo capacity";
                         if (_context.weightAnalizer.CapacityDelta > 0.0001) {
                             float timeLeft = (float)((1.0f - cargoUsage) / _context.weightAnalizer.CapacityDelta);
@@ -51,11 +51,11 @@ namespace IngameScript {
 
                     }
                     else {
-                        Vector2 position = new Vector2((Painter.AvailableSize.X - max) / 2.0f + margin, margin / 2.0f);
-                        Vector2 size = new Vector2(max - margin * 2, max / 2.0f - margin);
+                        Vector2 position = new Vector2(((Painter.AvailableSize.X - max) / 2.0f) + margin, margin / 2.0f);
+                        Vector2 size = new Vector2(max - (margin * 2), (max / 2.0f) - margin);
                         Painter.Radial(position, size, liftUsage, shortMode ? "Lift thrust" : "Lift thrust usage", 30);
                         position.Y += Painter.AvailableSize.Y / 2.0f;
-                        Painter.FilledRectangleEx(new Vector2(position.X, position.Y - 1.0f - margin / 2.0f), new Vector2(max - 2 * margin, 2.0f), Painter.SecondaryColor);
+                        Painter.FilledRectangleEx(new Vector2(position.X, position.Y - 1.0f - (margin / 2.0f)), new Vector2(max - (2 * margin), 2.0f), Painter.SecondaryColor);
                         string subText = shortMode ? "Cargo" : "Cargo capacity";
                         if (_context.weightAnalizer.CapacityDelta > 0.0001) {
                             float timeLeft = (float)((1.0f - cargoUsage) / _context.weightAnalizer.CapacityDelta);
@@ -65,7 +65,7 @@ namespace IngameScript {
                         if (liftUsage > _context.weightAnalizer.GetLiftThresholdWarning()) {
                             position.Y -= Painter.AvailableSize.Y / 2.0f;
                             Vector2 spriteSize = new Vector2(64, 64);
-                            Vector2 spritePos = new Vector2((Painter.AvailableSize.X - spriteSize.X) / 2.0f, margin / 2.0f + size.Y - spriteSize.Y);
+                            Vector2 spritePos = new Vector2((Painter.AvailableSize.X - spriteSize.X) / 2.0f, (margin / 2.0f) + size.Y - spriteSize.Y);
                             if (_context.tick % 2 == 0) {
                                 Painter.Sprite(spritePos, spriteSize, "Danger");
                             }

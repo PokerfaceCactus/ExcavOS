@@ -17,22 +17,16 @@ using VRage.Game;
 using VRage;
 using VRageMath;
 
-namespace IngameScript
-{
-    partial class Program
-    {
-        public class ExcavOSScreen : ScreenHandler<ExcavOSContext>
-        {
+namespace IngameScript {
+    partial class Program {
+        public class ExcavOSScreen : ScreenHandler<ExcavOSContext> {
             public new const string SCREEN_NAME = "ExcavOS";
 
-            public ExcavOSScreen(ExcavOSContext context) : base(context)
-            {
+            public ExcavOSScreen(ExcavOSContext context) : base(context) {
             }
 
-            public override void Draw(IMyTextSurface surface)
-            {
-                using (var frame = surface.DrawFrame())
-                {
+            public override void Draw(IMyTextSurface surface) {
+                using (MySpriteDrawFrame frame = surface.DrawFrame()) {
                     Painter.SetCurrentSurfaceAndFrame(surface, frame);
                     Painter.SpriteCentered(Painter.Center, new Vector2(Painter.Height * 0.8f, Painter.Height * 0.8f), "Textures\\FactionLogo\\Miners\\MinerIcon_3.dds");
                     Painter.TextEx(new Vector2(Painter.Center.X, Painter.Center.Y - 60.0f), Painter.BackgroundColor, "ExcavOS", 1.6f);

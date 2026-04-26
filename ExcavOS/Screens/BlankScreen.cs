@@ -17,22 +17,16 @@ using VRage.Game;
 using VRage;
 using VRageMath;
 
-namespace IngameScript
-{
-    partial class Program
-    {
-        public class BlankScreen : ScreenHandler<ExcavOSContext>
-        {
+namespace IngameScript {
+    partial class Program {
+        public class BlankScreen : ScreenHandler<ExcavOSContext> {
 
-            public BlankScreen(ExcavOSContext context) : base(context)
-            {
+            public BlankScreen(ExcavOSContext context) : base(context) {
             }
 
-            public override void Draw(IMyTextSurface surface)
-            {
-                using (var frame = surface.DrawFrame())
-                {
-                    Painter.SetCurrentSurfaceAndFrame(surface, frame);                                        
+            public override void Draw(IMyTextSurface surface) {
+                using (MySpriteDrawFrame frame = surface.DrawFrame()) {
+                    Painter.SetCurrentSurfaceAndFrame(surface, frame);
                 }
             }
         }

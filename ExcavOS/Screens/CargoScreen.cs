@@ -18,57 +18,46 @@ using VRage;
 using VRageMath;
 using System.Runtime.InteropServices;
 
-namespace IngameScript
-{
-    partial class Program
-    {
-        public class CargoScreen : ScreenHandler<ExcavOSContext>
-        {
+namespace IngameScript {
+    partial class Program {
+        public class CargoScreen : ScreenHandler<ExcavOSContext> {
             public new const string SCREEN_NAME = "CargoOre";
             private readonly StringBuilder sb = new StringBuilder();
 
-            public CargoScreen(ExcavOSContext context) : base(context)
-            {
+            public CargoScreen(ExcavOSContext context) : base(context) {
             }
 
-            private string ExtractName(string itemType)
-            {
+            private string ExtractName(string itemType) {
                 return itemType.Split('/').Last();
             }
 
-            private string FormatWithSuffix(double amount)
-            {
-                if (amount >= 1000000)
-                {
+            private string FormatWithSuffix(double amount) {
+                if (amount >= 1000000) {
                     return string.Format("{0,10:0.00}Mt", amount / 1000000);
-                } else if (amount >= 1000)
-                {
+                }
+                else if (amount >= 1000) {
                     return string.Format("{0,10:0.00}t", amount / 1000);
                 }
                 return string.Format("{0,10:0.00}kg", amount);
             }
 
-            public override void Draw(IMyTextSurface surface)
-            {
-                using (var frame = surface.DrawFrame())
-                {
+            public override void Draw(IMyTextSurface surface) {
+                using (MySpriteDrawFrame frame = surface.DrawFrame()) {
                     Painter.SetCurrentSurfaceAndFrame(surface, frame);
                     float margin = Painter.Width >= 512.0f ? 25.0f : 5.0f;
                     float gap = Painter.Width >= 512.0f ? 10.0f : 2.0f;
                     float fontSize = Painter.Width >= 512.0f ? 1.0f : 0.8f;
                     Vector2 position = new Vector2(margin, margin);
-                    Vector2 barSize = new Vector2(Painter.Width - margin * 2, Painter.Width >= 512.0f ? 2.0f : 1.0f);
+                    Vector2 barSize = new Vector2(Painter.Width - (margin * 2), Painter.Width >= 512.0f ? 2.0f : 1.0f);
 
-                    if (!_screenContext.cargoManager.hasAnyOre)
-                    {
+                    if (!_screenContext.cargoManager.hasAnyOre) {
                         Painter.SpriteCentered(Painter.Center, new Vector2(128f, 128f), "MyObjectBuilder_Ore/Stone", Painter.SecondaryColor);
                         Painter.Text(Painter.Center, "No ores");
                         return;
                     }
 
                     _screenContext.cargoManager.IterateCargoDescending((name, entry) => {
-                        if (entry.typeid != "MyObjectBuilder_Ore")
-                        {
+                        if (entry.typeid != "MyObjectBuilder_Ore") {
                             return;
                         }
                         sb.Clear();

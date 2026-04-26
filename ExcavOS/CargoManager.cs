@@ -93,7 +93,7 @@ namespace IngameScript {
             }
 
             public void IterateCargoDescending(Action<string, CargoEntry> callback) {
-                foreach (var item in cargo.OrderByDescending(key => key.Value.amount)) {
+                foreach (KeyValuePair<string, CargoEntry> item in cargo.OrderByDescending(key => key.Value.amount)) {
                     callback(item.Key, item.Value);
                 }
             }

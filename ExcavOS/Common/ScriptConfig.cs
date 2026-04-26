@@ -17,17 +17,13 @@ using VRage.Game;
 using VRage;
 using VRageMath;
 
-namespace IngameScript
-{
-    partial class Program
-    {
-        abstract public class ScriptConfig
-        {
+namespace IngameScript {
+    partial class Program {
+        abstract public class ScriptConfig {
             protected readonly MyIni _ini;
             protected readonly string _section;
 
-            public ScriptConfig(MyIni ini, string section)
-            {
+            public ScriptConfig(MyIni ini, string section) {
                 _ini = ini;
                 _section = section;
             }
@@ -36,41 +32,33 @@ namespace IngameScript
                 return _ini.Get(_section, key);
             }
 
-            protected void SetValue(string key, string value)
-            {
+            protected void SetValue(string key, string value) {
                 _ini.Set(_section, key, value);
             }
 
-            protected void SetValue(string key, float value)
-            {
+            protected void SetValue(string key, float value) {
                 _ini.Set(_section, key, value);
             }
 
-            protected void SetValue(string key, int value)
-            {
+            protected void SetValue(string key, int value) {
                 _ini.Set(_section, key, value);
             }
 
-            protected void SetValue(string key, bool value)
-            {
+            protected void SetValue(string key, bool value) {
                 _ini.Set(_section, key, value);
             }
 
-            protected bool KeyExists(string key)
-            {
+            protected bool KeyExists(string key) {
                 return _ini.ContainsKey(_section, key);
             }
 
-            public void LoadConfig(string blob)
-            {
+            public void LoadConfig(string blob) {
                 MyIniParseResult result;
-                if (!_ini.TryParse(blob, _section, out result))
-                {
+                if (!_ini.TryParse(blob, _section, out result)) {
                     return;
                 }
 
-                if (!_ini.ContainsSection(_section))
-                {
+                if (!_ini.ContainsSection(_section)) {
                     return;
                 }
 

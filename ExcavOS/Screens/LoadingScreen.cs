@@ -17,12 +17,9 @@ using VRage.Game;
 using VRage;
 using VRageMath;
 
-namespace IngameScript
-{
-    partial class Program
-    {
-        public class LoadingScreen : ScreenHandler<ExcavOSContext>
-        {
+namespace IngameScript {
+    partial class Program {
+        public class LoadingScreen : ScreenHandler<ExcavOSContext> {
             public new const string SCREEN_NAME = "LoadingScreen";
             private readonly double loadingStart;
             private readonly double loadingTime;
@@ -30,18 +27,15 @@ namespace IngameScript
             private int currentQuote = 0;
             private string quote;
 
-            public LoadingScreen(ExcavOSContext context) : base(context)
-            {
+            public LoadingScreen(ExcavOSContext context) : base(context) {
                 loadingStart = _screenContext.TimeAccumulator.TotalSeconds;
-                loadingTime = 1.0 + _screenContext.Randomizer.Next(1000, 2000) / 1000.0;
+                loadingTime = 1.0 + (_screenContext.Randomizer.Next(1000, 2000) / 1000.0);
                 quotesPerLoading = _screenContext.Randomizer.Next(2, 8);
             }
 
-            private string GetInitializationSimsLikeText(double progress)
-            {
+            private string GetInitializationSimsLikeText(double progress) {
                 int quoteNumber = (int)(progress / (1.0 / quotesPerLoading));
-                if (quoteNumber == 0)
-                {
+                if (quoteNumber == 0) {
                     return "Booting";
                 }
 
@@ -56,8 +50,7 @@ namespace IngameScript
                     "Generating phantom forces",
                     "Connecting dots"
                 };
-                if (currentQuote != quoteNumber)
-                {
+                if (currentQuote != quoteNumber) {
                     int quoteIndex = _screenContext.Randomizer.Next(0, quotes.Length);
                     quote = quotes[quoteIndex];
                 }
@@ -66,24 +59,21 @@ namespace IngameScript
                 return quote;
             }
 
-            public override void Draw(IMyTextSurface surface)
-            {
-                using (var frame = surface.DrawFrame())
-                {
+            public override void Draw(IMyTextSurface surface) {
+                using (MySpriteDrawFrame frame = surface.DrawFrame()) {
                     Painter.SetCurrentSurfaceAndFrame(surface, frame);
                     float value = (float)((_screenContext.TimeAccumulator.TotalSeconds - loadingStart) / loadingTime);
                     float margin = 20.0f;
                     float bottomYPos = Painter.AvailableSize.Y - margin;
-                    
+
                     Painter.Text(new Vector2(Painter.Center.X, margin), "ExcavOS");
                     Painter.SpriteCentered(Painter.Center, new Vector2(80, 80), "Textures\\FactionLogo\\Miners\\MinerIcon_3.dds");
                     Painter.Text(new Vector2(margin, bottomYPos - margin), GetInitializationSimsLikeText(value) + "...", 0.5f, TextAlignment.LEFT);
-                    Painter.ProgressBar(new Vector2(margin, bottomYPos), new Vector2(Painter.AvailableSize.X - margin * 2, 10), value, 2.0f);
+                    Painter.ProgressBar(new Vector2(margin, bottomYPos), new Vector2(Painter.AvailableSize.X - (margin * 2), 10), value, 2.0f);
                 }
             }
 
-            public override bool ShouldDispose()
-            {
+            public override bool ShouldDispose() {
                 return _screenContext.TimeAccumulator.TotalSeconds - loadingStart > loadingTime;
             }
         }

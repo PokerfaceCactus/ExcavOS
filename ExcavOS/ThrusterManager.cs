@@ -1,4 +1,5 @@
-﻿using Sandbox.Game.EntityComponents;
+﻿using ProtoBuf;
+using Sandbox.Game.EntityComponents;
 using Sandbox.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using SpaceEngineers.Game.ModAPI.Ingame;
@@ -121,16 +122,13 @@ namespace IngameScript {
 
                 foreach (IMyThrust thrust in thrusters) {
 
-                    if (_config.AutomateThrust)
-                    {
+                    if (_config.AutomateThrust) {
                         if (_context.systemManager.ShipState == ShipState.isDocked ||
-                            _context.systemManager.ShipState == ShipState.isStatic)
-                        {
+                            _context.systemManager.ShipState == ShipState.isStatic) {
                             thrust.Enabled = false;
                         }
                         else if (_context.systemManager.ShipState == ShipState.isControlled ||
-                                 _context.systemManager.ShipState == ShipState.isIdle)
-                        {
+                                 _context.systemManager.ShipState == ShipState.isIdle) {
                             thrust.Enabled = thrust.MaxEffectiveThrust > 0;
                         }
                     }
@@ -152,7 +150,6 @@ namespace IngameScript {
 
                 double effectiveThrust = 0;
                 foreach (IMyThrust thrust in thrusters) {
-                    effectiveThrust += Vector3D.Dot(direction, thrust.WorldMatrix.Backward) * thrust.MaxEffectiveThrust;
                     if (thrust.IsWorking) {
                         effectiveThrust += Vector3D.Dot(direction, thrust.WorldMatrix.Backward) * thrust.MaxEffectiveThrust;
                     }
